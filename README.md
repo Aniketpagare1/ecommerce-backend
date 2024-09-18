@@ -38,8 +38,6 @@ ecommerce-backend/
 │   └── authRoutes.js     # Authentication routes (register/login)
 │   └── productRoutes.js  # Product CRUD routes
 │   └── orderRoutes.js    # Order management routes
-├── data/
-│   └── seed.js           # Script to seed initial data (users, products)
 ├── .env                  # Environment variables (JWT secret, DB URL)
 ├── app.js                # Main server file
 ├── package.json          # Project dependencies and scripts
