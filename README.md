@@ -51,7 +51,7 @@ ecommerce-backend/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/ecommerce-backend.git
+git clone https://github.com/Aniketpagare1/ecommerce-backend.git
 cd ecommerce-backend
 ```
 
@@ -68,7 +68,7 @@ npm install
 Create a **`.env`** file in the root of your project. Add the following environment variables:
 
 ```txt
-MONGO_URI=mongodb://localhost:27017/ecommerce  # or your MongoDB Atlas connection string
+MONGO_URI=mongodb://localhost:27017/ecommerce  
 JWT_SECRET=your_jwt_secret_key
 ```
 
