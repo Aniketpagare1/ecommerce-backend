@@ -74,17 +74,10 @@ JWT_SECRET=your_jwt_secret_key
 
 - Replace **`your_jwt_secret_key`** with a strong random secret for JWT token signing.
 
-### 4. Seed Initial Data (Optional)
-
-To add some initial users and products to the database, run the seed script:
-
-```bash
-node data/seed.js
-```
 
 This will insert sample **admin**, **user**, and **product** data into your MongoDB.
 
-### 5. Start the Server
+### 4. Start the Server
 
 Run the server using:
 
@@ -173,40 +166,4 @@ This API uses **JWT (JSON Web Tokens)** for securing routes. When logging in, yo
 
 ---
 
-## 🧪 Running Tests
 
-This project supports unit testing. To run tests, first ensure you have installed **Mocha** (or another testing library).
-
-### Install Mocha (or Jest):
-
-```bash
-npm install --save-dev mocha
-```
-
-### Run Tests:
-
-```bash
-npm test
-```
-
-Currently, the testing setup is basic, but you can expand it by adding tests for the various API endpoints.
-
----
-
-## ⚠️ Error Handling
-
-- **400 Bad Request**: Occurs when a required field is missing or invalid.
-- **401 Unauthorized**: Occurs when a user is not authenticated or provides an invalid token.
-- **403 Forbidden**: Occurs when a user attempts to access an admin-only route.
-- **500 Internal Server Error**: Indicates something went wrong on the server.
-
----
-
-## 💡 Future Enhancements
-
-- Add user profile management (e.g., update user details).
-- Implement pagination for product listings.
-- Enhance order history with more details.
-- Expand unit tests to cover all routes.
-
----
