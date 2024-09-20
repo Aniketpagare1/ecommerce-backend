@@ -72,98 +72,266 @@ MONGO_URI=mongodb://localhost:27017/ecommerce
 JWT_SECRET=your_jwt_secret_key
 ```
 
-- Replace **`your_jwt_secret_key`** with a strong random secret for JWT token signing.
+Here’s a set of test cases formatted for your GitHub README file. You can run these in Postman to test your API endpoints.
 
+### API Test Cases
 
-This will insert sample **admin**, **user**, and **product** data into your MongoDB.
+#### User Authentication
 
-### 4. Start the Server
+1. **Register a New User**
+   - **Endpoint**: `POST /api/auth/register`
+   - **Request Body**:
+     ```json
+     {
+       "name": "Test User",
+       "email": "test@example.com",
+       "password": "password",
+       "role": "user"
+     }
+     ```
+   - **Expected Response**: 
+     - Status: `201 Created`
+     - Body: 
+     ```json
+     {
+       "_id": "userId",
+       "email": "test@example.com"
+     }
+     ```
 
-Run the server using:
+2. **Login User**
+   - **Endpoint**: `POST /api/auth/login`
+   - **Request Body**:
+     ```json
+     {
+       "email": "test@example.com",
+       "password": "password"
+     }
+     ```
+   - **Expected Response**:
+     - Status: `200 OK`
+     - Body:
+     ```json
+     {
+       "token": "jwtToken"
+     }
+     ```
 
-```bash
-npm run start
-```
+3. **Register an Admin User**
+   - **Endpoint**: `POST /api/auth/register`
+   - **Request Body**:
+     ```json
+     {
+       "name": "Admin User",
+       "email": "admin@example.com",
+       "password": "password",
+       "role": "admin"
+     }
+     ```
+   - **Expected Response**: 
+     - Status: `201 Created`
+     - Body:
+     ```json
+     {
+       "_id": "adminId",
+       "email": "admin@example.com"
+     }
+     ```
 
-You should see output indicating the server is running on port **5000**:
-
-```
-MongoDB connected: localhost
-Server running on port 5000
-```
+4. **Login Admin User**
+   - **Endpoint**: `POST /api/auth/login`
+   - **Request Body**:
+     ```json
+     {
+       "email": "admin@example.com",
+       "password": "password"
+     }
+     ```
+   - **Expected Response**:
+     - Status: `200 OK`
+     - Body:
+     ```json
+     {
+       "token": "adminJwtToken"
+     }
+     ```
 
 ---
 
-## 🛠️ API Endpoints
+#### Products API
 
-### **User Authentication**
-
-1. **Register** - `POST /api/auth/register`
-   - Register a new user (or admin).
-   - **Body** (JSON):
-     ```json
-     {
-       "name": "John Doe",
-       "email": "john@example.com",
-       "password": "password123",
-       "role": "user"  // or "admin"
-     }
-     ```
-
-2. **Login** - `POST /api/auth/login`
-   - Log in to get a JWT token.
-   - **Body** (JSON):
-     ```json
-     {
-       "email": "john@example.com",
-       "password": "password123"
-     }
-     ```
-
-### **Product Management (Admin Only)**
-
-1. **Create Product** - `POST /api/products`
-   - Requires admin JWT token.
-   - **Body** (JSON):
+5. **Create a Product (Admin)**
+   - **Endpoint**: `POST /api/products`
+   - **Headers**: 
+     - `Authorization: Bearer adminJwtToken`
+   - **Request Body**:
      ```json
      {
        "name": "Product 1",
-       "description": "This is a product description",
-       "price": 29.99,
-       "category": "Electronics",
-       "stock": 50
+       "description": "Description",
+       "price": 100,
+       "category": "Category 1",
+       "stock": 10
      }
      ```
-
-2. **Get All Products** - `GET /api/products`
-   - Public route, accessible by all users.
-
-### **Order Management**
-
-1. **Place Order** - `POST /api/orders`
-   - Requires user JWT token.
-   - **Body** (JSON):
+   - **Expected Response**: 
+     - Status: `201 Created`
+     - Body: 
      ```json
      {
-       "productId": "601c7e0c9f1f88471c82895b",
-       "quantity": 2
+       "_id": "productId",
+       "name": "Product 1"
      }
      ```
 
-2. **Get User Orders** - `GET /api/orders/myorders`
-   - Requires user JWT token.
+6. **Get All Products**
+   - **Endpoint**: `GET /api/products`
+   - **Expected Response**: 
+     - Status: `200 OK`
+     - Body: 
+     ```json
+     [
+       {
+         "_id": "productId",
+         "name": "Product 1"
+       }
+     ]
+     ```
+
+7. **Get a Single Product by ID**
+   - **Endpoint**: `GET /api/products/:id`
+   - **URL Params**: 
+     - `id`: `productId`
+   - **Expected Response**: 
+     - Status: `200 OK`
+     - Body: 
+     ```json
+     {
+       "_id": "productId",
+       "name": "Product 1"
+     }
+     ```
+
+8. **Update a Product (Admin)**
+   - **Endpoint**: `PUT /api/products/:id`
+   - **Headers**: 
+     - `Authorization: Bearer adminJwtToken`
+   - **URL Params**: 
+     - `id`: `productId`
+   - **Request Body**:
+     ```json
+     {
+       "price": 150
+     }
+     ```
+   - **Expected Response**: 
+     - Status: `200 OK`
+     - Body: 
+     ```json
+     {
+       "_id": "productId",
+       "price": 150
+     }
+     ```
+
+9. **Delete a Product (Admin)**
+   - **Endpoint**: `DELETE /api/products/:id`
+   - **Headers**: 
+     - `Authorization: Bearer adminJwtToken`
+   - **URL Params**: 
+     - `id`: `productId`
+   - **Expected Response**: 
+     - Status: `200 OK`
+     - Body: 
+     ```json
+     {
+       "message": "Product removed"
+     }
+     ```
 
 ---
 
-## 🔑 Authentication and Authorization
+#### Orders API
 
-This API uses **JWT (JSON Web Tokens)** for securing routes. When logging in, you’ll receive a **token** in the response. Use this token to access protected routes by passing it in the **Authorization** header.
+10. **Create an Order**
+    - **Endpoint**: `POST /api/orders`
+    - **Headers**: 
+      - `Authorization: Bearer userJwtToken`
+    - **Request Body**:
+      ```json
+      {
+        "productId": "productId",
+        "quantity": 2
+      }
+      ```
+    - **Expected Response**: 
+      - Status: `201 Created`
+      - Body: 
+      ```json
+      {
+        "totalPrice": 200,
+        "_id": "orderId"
+      }
+      ```
 
-- **JWT Token Example**:
-  ```txt
-  Authorization: Bearer your_jwt_token_here
-  ```
+11. **Get User Orders**
+    - **Endpoint**: `GET /api/orders/myorders`
+    - **Headers**: 
+      - `Authorization: Bearer userJwtToken`
+    - **Expected Response**: 
+      - Status: `200 OK`
+      - Body: 
+      ```json
+      [
+        {
+          "_id": "orderId",
+          "totalPrice": 200
+        }
+      ]
+      ```
+
+12. **Get All Orders (Admin)**
+    - **Endpoint**: `GET /api/orders`
+    - **Headers**: 
+      - `Authorization: Bearer adminJwtToken`
+    - **Expected Response**: 
+      - Status: `200 OK`
+      - Body: 
+      ```json
+      [
+        {
+          "_id": "orderId",
+          "totalPrice": 200
+        }
+      ]
+      ```
+
+13. **Update Order Status (Admin)**
+    - **Endpoint**: `PUT /api/orders/:id`
+    - **Headers**: 
+      - `Authorization: Bearer adminJwtToken`
+    - **URL Params**: 
+      - `id`: `orderId`
+    - **Request Body**:
+      ```json
+      {
+        "status": "Shipped"
+      }
+      ```
+    - **Expected Response**: 
+      - Status: `200 OK`
+      - Body: 
+      ```json
+      {
+        "message": "Order updated"
+      }
+      ```
 
 ---
+
+### Notes
+- Replace `adminJwtToken`, `userJwtToken`, `productId`, and `orderId` with the actual tokens and IDs you receive from your requests.
+- Use Postman to send these requests and verify that the responses match the expected output.
+
 
 
